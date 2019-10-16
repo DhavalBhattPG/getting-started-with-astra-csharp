@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using getting_started_with_apollo_csharp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using getting_started_with_apollo_csharp.Models;
@@ -22,42 +21,91 @@ namespace getting_started_with_apollo_csharp.Controllers
 
         // GET api/spacecraft/{spaceCraftName}/{journeyId}/instruments/temperature
         [HttpGet("temperature")]
-        public ActionResult<ICollection<spacecraft_temperature_over_time>> GetTemperatureReading(string spaceCraftName, Guid journeyId)
+        public ActionResult<PagedResultWrapper<ICollection<spacecraft_temperature_over_time>>> GetTemperatureReading(string spaceCraftName, Guid journeyId,
+            [FromQuery]byte[] pageState, [FromQuery]int? pageSize)
         {
             var spaceCraft = new Table<spacecraft_temperature_over_time>(Service.Session);
-            IEnumerable<Models.spacecraft_temperature_over_time> temperature = spaceCraft.
-                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId).Execute().OrderBy(s => s.Reading_Time);
-            return temperature.ToList();
+            var query =spaceCraft.
+                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId);
+            if (pageSize.HasValue)
+            {
+                query.SetPageSize(pageSize.Value);
+            }
+            if (pageState!=null && pageState.Length>0)
+            {
+                query.SetPagingState(pageState);
+            }
+            var temperature = query.ExecutePaged();
+            return new PagedResultWrapper<ICollection<spacecraft_temperature_over_time>>(pageSize.HasValue? pageSize.Value: 0,
+                temperature.PagingState, temperature.OrderBy(s => s.Reading_Time).ToList()
+            );
         }
 
         // GET api/spacecraft/{spaceCraftName}/{journeyId}/instruments/pressure
         [HttpGet("pressure")]
-        public ActionResult<ICollection<spacecraft_pressure_over_time>> GetPressureReading(string spaceCraftName, Guid journeyId)
+        public ActionResult<PagedResultWrapper<ICollection<spacecraft_pressure_over_time>>> GetPressureReading(string spaceCraftName, Guid journeyId,
+                    [FromQuery]byte[] pageState, [FromQuery]int? pageSize)
         {
+
             var spaceCraft = new Table<spacecraft_pressure_over_time>(Service.Session);
-            IEnumerable<spacecraft_pressure_over_time> pressure = spaceCraft.
-                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId).Execute().OrderBy(s => s.Reading_Time);
-            return pressure.ToList();
+            var query =spaceCraft.
+                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId);
+            if (pageSize.HasValue)
+            {
+                query.SetPageSize(pageSize.Value);
+            }
+            if (pageState!=null && pageState.Length>0)
+            {
+                query.SetPagingState(pageState);
+            }
+            var pressure = query.ExecutePaged();
+            return new PagedResultWrapper<ICollection<spacecraft_pressure_over_time>>(pageSize.HasValue? pageSize.Value: 0,
+                pressure.PagingState, pressure.OrderBy(s => s.Reading_Time).ToList()
+            );
         }
 
         // GET api/spacecraft/{spaceCraftName}/{journeyId}/instruments/location
         [HttpGet("location")]
-        public ActionResult<ICollection<spacecraft_location_over_time>> GetLocationReading(string spaceCraftName, Guid journeyId)
+        public ActionResult<PagedResultWrapper<ICollection<spacecraft_location_over_time>>> GetLocationReading(string spaceCraftName, Guid journeyId,
+                    [FromQuery]byte[] pageState, [FromQuery]int? pageSize)
         {
             var spaceCraft = new Table<spacecraft_location_over_time>(Service.Session);
-            IEnumerable<spacecraft_location_over_time> location = spaceCraft.
-                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId).Execute().OrderBy(s => s.Reading_Time);
-            return location.ToList();
+            var query =spaceCraft.
+                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId);
+            if (pageSize.HasValue)
+            {
+                query.SetPageSize(pageSize.Value);
+            }
+            if (pageState!=null && pageState.Length>0)
+            {
+                query.SetPagingState(pageState);
+            }
+            var location = query.ExecutePaged();
+            return new PagedResultWrapper<ICollection<spacecraft_location_over_time>>(pageSize.HasValue? pageSize.Value: 0,
+                location.PagingState, location.OrderBy(s => s.Reading_Time).ToList()
+            );
         }
 
         // GET api/spacecraft/{spaceCraftName}/{journeyId}/instruments/speed
         [HttpGet("speed")]
-        public ActionResult<ICollection<spacecraft_speed_over_time>> GetSpeedReading(string spaceCraftName, Guid journeyId)
+        public ActionResult<PagedResultWrapper<ICollection<spacecraft_speed_over_time>>> GetSpeedReading(string spaceCraftName, Guid journeyId,
+                    [FromQuery]byte[] pageState, [FromQuery]int? pageSize)
         {
             var spaceCraft = new Table<spacecraft_speed_over_time>(Service.Session);
-            IEnumerable<spacecraft_speed_over_time> speed = spaceCraft.
-                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId).Execute().OrderBy(s => s.Reading_Time);
-            return speed.ToList();
+            var query =spaceCraft.
+                Where(s => s.Spacecraft_Name==spaceCraftName && s.Journey_Id==journeyId);
+            if (pageSize.HasValue)
+            {
+                query.SetPageSize(pageSize.Value);
+            }
+            if (pageState!=null && pageState.Length>0)
+            {
+                query.SetPagingState(pageState);
+            }
+            var speed = query.ExecutePaged();
+            return new PagedResultWrapper<ICollection<spacecraft_speed_over_time>>(pageSize.HasValue? pageSize.Value: 0,
+                speed.PagingState, speed.OrderBy(s => s.Reading_Time).ToList()
+            );
         }
     }
 }

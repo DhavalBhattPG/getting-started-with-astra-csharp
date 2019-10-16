@@ -9,7 +9,7 @@ namespace getting_started_with_apollo_csharp.Models
         public string Spacecraft_Name { get; set; }
         [JsonProperty(PropertyName = "journey_id")]
         public Guid Journey_Id { get; set; }
-        public Tuple<double, double, double> Location { get; set; }
+        public location_udt Location { get; set; }
         [JsonProperty(PropertyName = "reading_time")]
         public DateTimeOffset Reading_Time { get; set; }
         [JsonProperty(PropertyName = "location_unit")]

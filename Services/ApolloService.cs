@@ -18,6 +18,8 @@ namespace getting_started_with_apollo_csharp.Services
                        .WithCredentials("getting", "started")
                        .Build()
                        .Connect("getting_started");   
+                    
+                    _session.UserDefinedTypes.Define(UdtMap.For<Models.location_udt>());
                 } 
                     return _session;
             }

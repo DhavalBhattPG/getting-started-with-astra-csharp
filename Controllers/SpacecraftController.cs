@@ -3,6 +3,8 @@ using System.Linq;
 using getting_started_with_apollo_csharp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Cassandra.Data.Linq;
+using Cassandra.Mapping;
+using System;
 
 namespace getting_started_with_apollo_csharp.Controllers
 {
@@ -33,6 +35,26 @@ namespace getting_started_with_apollo_csharp.Controllers
             var spaceCraft = new Table<Models.spacecraft_journey_catalog>(Service.Session);
             var craft = spaceCraft.Where(s => s.Spacecraft_Name==spaceCraftName).Execute().OrderBy(s => s.Start);
             return craft.ToList();
+        }
+
+        // POST api/spacecrafts/{spaceCraftName}
+        [HttpPost("{spaceCraftName}")]
+        public ActionResult<Guid> CreateJourneyForSpacecraft(string spaceCraftName, [FromBody]string summary)
+        {
+            IMapper mapper = new Mapper(Service.Session);
+            var journey = new Models.spacecraft_journey_catalog();
+            journey.Spacecraft_Name=spaceCraftName;
+            journey.Journey_Id=Cassandra.TimeUuid.NewId();
+            journey.Active=false;
+            journey.Start=DateTimeOffset.Now;
+            journey.End = DateTimeOffset.Now.AddSeconds(1000);
+            journey.Summary = summary;
+            
+            mapper.Insert(journey);
+
+            //TODO Add all the code here to add the instrument readings
+
+            return journey.Journey_Id;
         }
     }
 }
