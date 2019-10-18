@@ -5,6 +5,7 @@ using getting_started_with_apollo_csharp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using getting_started_with_apollo_csharp.Models;
 using Cassandra.Data.Linq;
+using Cassandra.Mapping;
 
 namespace getting_started_with_apollo_csharp.Controllers
 {
@@ -107,5 +108,50 @@ namespace getting_started_with_apollo_csharp.Controllers
                 speed.PagingState, speed.OrderBy(s => s.Reading_Time).ToList()
             );
         }
+    
+        [HttpPost("temperature")] 
+        public ActionResult SaveTemperatures([FromBody]spacecraft_temperature_over_time[] temperatures)
+        {
+            IMapper mapper = new Mapper(Service.Session);
+            for(int i=0; i<temperatures.Count(); i++)
+            {
+                mapper.Insert(temperatures[i]);
+            }                
+            return Ok();
+        }
+
+        [HttpPost("pressure")] 
+        public ActionResult SavePressures([FromBody]spacecraft_pressure_over_time[] pressures)
+        {            
+            IMapper mapper = new Mapper(Service.Session);
+            for(int i=0; i<pressures.Count(); i++)
+            {
+                mapper.Insert(pressures[i]);
+            }       
+            return Ok();
+        }
+
+        [HttpPost("speed")] 
+        public ActionResult SaveSpeed([FromBody]spacecraft_speed_over_time[] speed)
+        {            
+            IMapper mapper = new Mapper(Service.Session);    
+            for(int i=0; i<speed.Count(); i++)
+            {
+                mapper.Insert(speed[i]);
+            }    
+            return Ok();
+        }
+
+        [HttpPost("location")] 
+        public ActionResult SaveLocations([FromBody]spacecraft_location_over_time[] locations)
+        {
+            IMapper mapper = new Mapper(Service.Session);
+            for(int i=0; i<locations.Count(); i++)
+            {
+                mapper.Insert(locations[i]);
+            }    
+            return Ok();
+        }
+    
     }
 }

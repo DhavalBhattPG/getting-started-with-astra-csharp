@@ -1,5 +1,6 @@
 using System;
 using Cassandra;
+using Cassandra.Mapping;
 using getting_started_with_apollo_csharp.Models;
 
 namespace getting_started_with_apollo_csharp.Services
@@ -30,6 +31,7 @@ namespace getting_started_with_apollo_csharp.Services
             var session =  Cluster.Builder()
                        .WithCloudSecureConnectionBundle(secureConnectBundlePath)
                        .WithCredentials(username, password)
+                       .WithQueryOptions(new QueryOptions().SetConsistencyLevel(ConsistencyLevel.LocalQuorum))
                        .Build()
                        .Connect(keyspace);   
                     
