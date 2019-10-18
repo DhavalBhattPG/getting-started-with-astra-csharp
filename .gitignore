@@ -263,3 +263,4 @@ FakesAssemblies/
 *.opt
 
 .vscode
+.DS_Store

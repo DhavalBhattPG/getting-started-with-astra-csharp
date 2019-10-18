@@ -26,11 +26,11 @@ namespace getting_started_with_apollo_csharp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(o => o.AddPolicy("AllowAllPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    }));
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
             services.AddSingleton(typeof(Interfaces.IDataStaxService), typeof(Services.ApolloService));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
