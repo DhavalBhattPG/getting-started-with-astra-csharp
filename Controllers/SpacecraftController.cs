@@ -52,8 +52,6 @@ namespace getting_started_with_apollo_csharp.Controllers
             
             mapper.Insert(journey);
 
-            //TODO Add all the code here to add the instrument readings
-
             return journey.Journey_Id;
         }
     }

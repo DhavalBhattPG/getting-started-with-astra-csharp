@@ -113,10 +113,12 @@ namespace getting_started_with_apollo_csharp.Controllers
         public ActionResult SaveTemperatures([FromBody]spacecraft_temperature_over_time[] temperatures)
         {
             IMapper mapper = new Mapper(Service.Session);
+            var batch = mapper.CreateBatch();
             for(int i=0; i<temperatures.Count(); i++)
             {
-                mapper.Insert(temperatures[i]);
-            }                
+                batch.Insert(temperatures[i]);
+            }      
+            mapper.Execute(batch);          
             return Ok();
         }
 
@@ -124,10 +126,12 @@ namespace getting_started_with_apollo_csharp.Controllers
         public ActionResult SavePressures([FromBody]spacecraft_pressure_over_time[] pressures)
         {            
             IMapper mapper = new Mapper(Service.Session);
+            var batch = mapper.CreateBatch();
             for(int i=0; i<pressures.Count(); i++)
             {
-                mapper.Insert(pressures[i]);
-            }       
+                batch.Insert(pressures[i]);
+            }      
+            mapper.Execute(batch);  
             return Ok();
         }
 
@@ -135,21 +139,25 @@ namespace getting_started_with_apollo_csharp.Controllers
         public ActionResult SaveSpeed([FromBody]spacecraft_speed_over_time[] speed)
         {            
             IMapper mapper = new Mapper(Service.Session);    
+            var batch = mapper.CreateBatch();
             for(int i=0; i<speed.Count(); i++)
             {
-                mapper.Insert(speed[i]);
-            }    
+                batch.Insert(speed[i]);
+            }      
+            mapper.Execute(batch);  
             return Ok();
         }
 
         [HttpPost("location")] 
         public ActionResult SaveLocations([FromBody]spacecraft_location_over_time[] locations)
         {
-            IMapper mapper = new Mapper(Service.Session);
+            IMapper mapper = new Mapper(Service.Session);    
+            var batch = mapper.CreateBatch();
             for(int i=0; i<locations.Count(); i++)
             {
-                mapper.Insert(locations[i]);
-            }    
+                batch.Insert(locations[i]);
+            }      
+            mapper.Execute(batch);  
             return Ok();
         }
     
