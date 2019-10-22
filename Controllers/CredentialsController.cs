@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace getting_started_with_apollo_csharp.Controllers
 {
@@ -39,12 +40,12 @@ namespace getting_started_with_apollo_csharp.Controllers
 
         // GET api/credentials/test
         [HttpPost("test")]
-        public ActionResult TestCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace)
+        public ActionResult TestCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
         {
-            //Copy the secure connect bundle to a temporary location
+            //Copy the secure connect bundle to a temporary locationobj
             var filePath = Path.GetTempPath() + "/" + Guid.NewGuid() + ".zip";
             var output = System.IO.File.OpenWrite(filePath);
-            Request.Body.CopyTo(output);
+            file.CopyTo(output);
             output.Close();
 
             //Now test to see if it works
@@ -59,12 +60,12 @@ namespace getting_started_with_apollo_csharp.Controllers
 
         // GET api/credentials
         [HttpPost]
-        public ActionResult SaveCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace)
+        public ActionResult SaveCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
         {
             //Copy the secure connect bundle to a temporary location
             var filePath = Path.GetTempPath() + "/" + Guid.NewGuid() + ".zip";
             var output = System.IO.File.OpenWrite(filePath);
-            Request.Body.CopyTo(output);
+            file.CopyTo(output);            
             output.Close();
 
             //Now test to see if it works
