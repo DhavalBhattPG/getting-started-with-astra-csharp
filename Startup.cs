@@ -32,7 +32,7 @@ namespace getting_started_with_apollo_csharp
                     .AllowAnyHeader();
             }));
             services.AddSingleton(typeof(Interfaces.IDataStaxService), typeof(Services.ApolloService));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

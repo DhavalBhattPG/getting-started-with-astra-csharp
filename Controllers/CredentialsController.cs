@@ -54,7 +54,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 return Ok();
             } else {
-                return Unauthorized(result.Item2);
+                return Unauthorized();
             }
         }
 
@@ -74,7 +74,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 return Ok();
             } else {
-                return Unauthorized(result.Item2);
+                return Unauthorized();
             }
         }
     }
