@@ -12,12 +12,12 @@ namespace getting_started_with_apollo_csharp.Models
         public PagedResultWrapper(int pageSize, byte[] pageState, T data)
         {
             PageSize = pageSize;
-            PageState = pageState;
+            PageState = Convert.ToBase64String(pageState);
             Data = data;
         }
 
         public int PageSize { get; set; }
-        public byte[] PageState { get; set; }
+        public string PageState { get; set; }
         public T Data { get; set; }
     }
 
