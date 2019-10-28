@@ -19,6 +19,11 @@ namespace getting_started_with_apollo_csharp
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+             .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
                 .UseStartup<Startup>();
     }
 }

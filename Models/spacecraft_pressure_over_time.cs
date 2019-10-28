@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace getting_started_with_apollo_csharp.Models
 {
+    /// <summary>
+    /// Represents a row in the spacecraft_pressure_over_time table
+    /// </summary>
     public class spacecraft_pressure_over_time
     {
         [JsonProperty(PropertyName = "spacecraft_name")]

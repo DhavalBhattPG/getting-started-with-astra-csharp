@@ -12,7 +12,7 @@ namespace getting_started_with_apollo_csharp.Controllers
     [ApiController]
     public class SpacecraftController : ControllerBase
     {
-       private IDataStaxService Service { get; set; }
+        private IDataStaxService Service { get; set; }
 
         public SpacecraftController(IDataStaxService service)
         {
@@ -20,6 +20,10 @@ namespace getting_started_with_apollo_csharp.Controllers
         }
 
         // GET api/spacecrafts
+        /// <summary>
+        /// This returns all spacecraft in the database
+        /// </summary>
+        /// <returns>An array of spacecraft_journey_catalog objects</returns>
         [HttpGet]
         public ActionResult<ICollection<Models.spacecraft_journey_catalog>> GetAllSpaceCraft()
         {
@@ -29,27 +33,38 @@ namespace getting_started_with_apollo_csharp.Controllers
         }
 
         // GET api/spacecrafts/{spaceCraftName}
+        /// <summary>
+        /// This returns all journeys for a specific spacecraft
+        /// </summary>
+        /// <param name="spaceCraftName">The spacecraft to return data for</param>
+        /// <returns>An array of spacecraft_journey_catalog objects</returns>
         [HttpGet("{spaceCraftName}")]
         public ActionResult<ICollection<Models.spacecraft_journey_catalog>> GetJourneysForSpacecraft(string spaceCraftName)
         {
             var spaceCraft = new Table<Models.spacecraft_journey_catalog>(Service.Session);
-            var craft = spaceCraft.Where(s => s.Spacecraft_Name==spaceCraftName).Execute().OrderBy(s => s.Start);
+            var craft = spaceCraft.Where(s => s.Spacecraft_Name == spaceCraftName).Execute().OrderBy(s => s.Start);
             return craft.ToList();
         }
 
         // POST api/spacecrafts/{spaceCraftName}
+        /// <summary>
+        /// Create a new journey for the specified spacecraft with the specified summary
+        /// </summary>
+        /// <param name="spaceCraftName">The spacecraft name</param>
+        /// <param name="summary">The summary to associate with the spacecraft</param>
+        /// <returns>The newly created journey id</returns>
         [HttpPost("{spaceCraftName}")]
         public ActionResult<Guid> CreateJourneyForSpacecraft(string spaceCraftName, [FromBody]string summary)
         {
             IMapper mapper = new Mapper(Service.Session);
             var journey = new Models.spacecraft_journey_catalog();
-            journey.Spacecraft_Name=spaceCraftName;
-            journey.Journey_Id=Cassandra.TimeUuid.NewId();
-            journey.Active=false;
-            journey.Start=DateTimeOffset.Now;
+            journey.Spacecraft_Name = spaceCraftName;
+            journey.Journey_Id = Cassandra.TimeUuid.NewId();
+            journey.Active = false;
+            journey.Start = DateTimeOffset.Now;
             journey.End = DateTimeOffset.Now.AddSeconds(1000);
             journey.Summary = summary;
-            
+
             mapper.Insert(journey);
 
             return journey.Journey_Id;

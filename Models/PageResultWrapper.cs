@@ -3,6 +3,10 @@ using Newtonsoft.Json;
 
 namespace getting_started_with_apollo_csharp.Models
 {
+    /// <summary>
+    /// This class provides a wrapper around a result set which contains the data results as well as the returned page size and page state.
+    /// </summary>
+    /// <typeparam name="T">The type of data treturned</typeparam>
     public class PagedResultWrapper<T>
     {
         public PagedResultWrapper()
@@ -12,7 +16,7 @@ namespace getting_started_with_apollo_csharp.Models
         public PagedResultWrapper(int pageSize, byte[] pageState, T data)
         {
             PageSize = pageSize;
-            PageState = Convert.ToBase64String(pageState);
+            PageState = pageState != null ? Convert.ToBase64String(pageState) : null;
             Data = data;
         }
 

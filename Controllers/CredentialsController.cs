@@ -1,44 +1,64 @@
-using System.Collections.Generic;
-using System.Linq;
 using getting_started_with_apollo_csharp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Cassandra.Data.Linq;
-using Cassandra.Mapping;
 using System;
 using System.IO;
-using System.Threading.Tasks;
-using System.Text;
 using Microsoft.AspNetCore.Http;
 
 namespace getting_started_with_apollo_csharp.Controllers
 {
+    /// <summary>
+    /// Works with the managing the credentials for the Apollo database
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CredentialsController : ControllerBase
     {
-       private IDataStaxService Service { get; set; }
+        private IDataStaxService Service { get; set; }
 
         public CredentialsController(IDataStaxService service)
         {
             Service = service;
         }
+
+        /// <summary>
+        /// This checks to see if there is an existing connection to the Apollo database
+        /// </summary>
+        /// <returns>A 200 if a valid connection exists, a 401 if one does not</returns>
+        [ProducesResponseType(200)]     // OK
+        [ProducesResponseType(401)]     // Unauthorized
         [HttpGet]
         public ActionResult CheckConnection()
         {
-            try{
-                if (Service.Session!=null) {
-                    return Ok();
-                } else {
-
-                return Unauthorized();
-                };
-            } catch (Exception ex)
+            try
             {
-                return Unauthorized();
+                if (Service.Session != null)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return Unauthorized();
+                };
+            }
+            catch (Exception ex)
+            {
+                var res = new JsonResult(ex.Message);
+                res.StatusCode = StatusCodes.Status401Unauthorized;
+                return res;
             }
         }
 
         // GET api/credentials/test
+        /// <summary>
+        /// This tests the provided parameters and checks to see if they establish a valid connection to the Apollo database
+        /// </summary>
+        /// <param name="username">The Apollo database user name</param>
+        /// <param name="password">The Apollo database password for the user name</param>
+        /// <param name="keyspace">The keyspace in the Apollo database</param>
+        /// <param name="file">A body element containing the secure connect bundle file</param>
+        /// <returns>A 200 if the test was successful, a 401 if it was not</returns>
+        [ProducesResponseType(200)]     // OK
+        [ProducesResponseType(401)]     // Unauthorized
         [HttpPost("test")]
         public ActionResult TestCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
         {
@@ -53,19 +73,33 @@ namespace getting_started_with_apollo_csharp.Controllers
             if (result.Item1)
             {
                 return Ok();
-            } else {
-                return Unauthorized();
+            }
+            else
+            {
+                var res = new JsonResult(result.Item2);
+                res.StatusCode = StatusCodes.Status401Unauthorized;
+                return res;
             }
         }
 
         // GET api/credentials
+        /// <summary>
+        /// This tests and then saves the provided parameters and checks to see if they establish a valid connection to the Apollo database
+        /// </summary>
+        /// <param name="username">The Apollo database user name</param>
+        /// <param name="password">The Apollo database password for the user name</param>
+        /// <param name="keyspace">The keyspace in the Apollo database</param>
+        /// <param name="file">A body element containing the secure connect bundle file</param>
+        /// <returns>A 200 if a valid connection exists, a 401 if one does not</returns>
+        [ProducesResponseType(200)]     // OK
+        [ProducesResponseType(401)]     // Unauthorized
         [HttpPost]
         public ActionResult SaveCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
         {
             //Copy the secure connect bundle to a temporary location
             var filePath = Path.GetTempPath() + "/" + Guid.NewGuid() + ".zip";
             var output = System.IO.File.OpenWrite(filePath);
-            file.CopyTo(output);            
+            file.CopyTo(output);
             output.Close();
 
             //Now test to see if it works
@@ -73,8 +107,12 @@ namespace getting_started_with_apollo_csharp.Controllers
             if (result.Item1)
             {
                 return Ok();
-            } else {
-                return Unauthorized();
+            }
+            else
+            {
+                var res = new JsonResult(result.Item2);
+                res.StatusCode = StatusCodes.Status401Unauthorized;
+                return res;
             }
         }
     }
