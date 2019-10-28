@@ -8,7 +8,7 @@ Created and Maintained by [bechbd](https://github.com/bechbd)
 * How to connect to Apollo via the Secure Connect Bundle
 * How to manage a Cassandra Session within a .NET web application
 
-### Project Layout
+## Project Layout
 
 This sample also contains several interesting files that worth noting specifically:
 
