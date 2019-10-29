@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cassandra;
 
 namespace getting_started_with_apollo_csharp.Interfaces
@@ -7,7 +7,7 @@ namespace getting_started_with_apollo_csharp.Interfaces
     {
         ISession Session { get; }
 
-        System.Tuple<bool, string> SaveConnection(string username, string password, string keyspace, string secureConnectBundlePath);
-        System.Tuple<bool, string> TestConnection(string username, string password, string keyspace, string secureConnectBundlePath);
+        Task<System.Tuple<bool, string>> SaveConnection(string username, string password, string keyspace, string secureConnectBundlePath);
+        Task<System.Tuple<bool, string>> TestConnection(string username, string password, string keyspace, string secureConnectBundlePath);
     }
 }

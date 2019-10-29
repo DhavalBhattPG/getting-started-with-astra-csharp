@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Cassandra.Data.Linq;
 using Cassandra.Mapping;
 using System;
+using System.Threading.Tasks;
 
 namespace getting_started_with_apollo_csharp.Controllers
 {
@@ -25,11 +26,11 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// </summary>
         /// <returns>An array of spacecraft_journey_catalog objects</returns>
         [HttpGet]
-        public ActionResult<ICollection<Models.spacecraft_journey_catalog>> GetAllSpaceCraft()
+        public async Task<ActionResult<ICollection<Models.spacecraft_journey_catalog>>> GetAllSpaceCraft()
         {
             var spaceCraft = new Table<Models.spacecraft_journey_catalog>(Service.Session);
-            var crafts = spaceCraft.Execute().OrderBy(s => s.Spacecraft_Name).ThenBy(s => s.Start);
-            return crafts.ToList();
+            var crafts = await spaceCraft.ExecuteAsync();
+            return crafts.OrderBy(s => s.Spacecraft_Name).ThenBy(s => s.Start).ToList();
         }
 
         // GET api/spacecrafts/{spaceCraftName}
@@ -39,11 +40,11 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="spaceCraftName">The spacecraft to return data for</param>
         /// <returns>An array of spacecraft_journey_catalog objects</returns>
         [HttpGet("{spaceCraftName}")]
-        public ActionResult<ICollection<Models.spacecraft_journey_catalog>> GetJourneysForSpacecraft(string spaceCraftName)
+        public async Task<ICollection<Models.spacecraft_journey_catalog>> GetJourneysForSpacecraft(string spaceCraftName)
         {
             var spaceCraft = new Table<Models.spacecraft_journey_catalog>(Service.Session);
-            var craft = spaceCraft.Where(s => s.Spacecraft_Name == spaceCraftName).Execute().OrderBy(s => s.Start);
-            return craft.ToList();
+            var craft = await spaceCraft.Where(s => s.Spacecraft_Name == spaceCraftName).ExecuteAsync();
+            return craft.OrderBy(s => s.Start).ToList();
         }
 
         // POST api/spacecrafts/{spaceCraftName}
@@ -54,7 +55,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="summary">The summary to associate with the spacecraft</param>
         /// <returns>The newly created journey id</returns>
         [HttpPost("{spaceCraftName}")]
-        public ActionResult<Guid> CreateJourneyForSpacecraft(string spaceCraftName, [FromBody]string summary)
+        public async Task<Guid> CreateJourneyForSpacecraft(string spaceCraftName, [FromBody]string summary)
         {
             IMapper mapper = new Mapper(Service.Session);
             var journey = new Models.spacecraft_journey_catalog();
@@ -65,7 +66,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             journey.End = DateTimeOffset.Now.AddSeconds(1000);
             journey.Summary = summary;
 
-            mapper.Insert(journey);
+            await mapper.InsertAsync(journey);
 
             return journey.Journey_Id;
         }

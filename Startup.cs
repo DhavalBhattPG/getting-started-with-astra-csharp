@@ -25,14 +25,6 @@ namespace getting_started_with_apollo_csharp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Enable Cors
-            services.AddCors(o => o.AddPolicy("AllowAllPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
-
             //Add Swagger Document Properties
             services.AddSwaggerDocument(config =>
             {
@@ -55,6 +47,14 @@ namespace getting_started_with_apollo_csharp
                    };
                };
             });
+
+            //Enable Cors
+            services.AddCors(o => o.AddPolicy("AllowAllPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
 
             //This adds a singleton of the Apollo Session connection to dependency injection
             services.AddSingleton(typeof(Interfaces.IDataStaxService), typeof(Services.ApolloService));
