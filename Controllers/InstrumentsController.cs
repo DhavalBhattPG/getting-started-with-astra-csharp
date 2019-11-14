@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using getting_started_with_apollo_csharp.Models;
 using Cassandra.Data.Linq;
 using Cassandra.Mapping;
+using System.Threading.Tasks;
 
 namespace getting_started_with_apollo_csharp.Controllers
 {
@@ -33,7 +34,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="pageSize">The page size to return</param>
         /// <returns>A PageResultWrapper containing the results</returns>
         [HttpGet("temperature")]
-        public ActionResult<PagedResultWrapper<ICollection<spacecraft_temperature_over_time>>> GetTemperatureReading(string spaceCraftName, Guid journeyId,
+        public async Task<PagedResultWrapper<ICollection<spacecraft_temperature_over_time>>> GetTemperatureReading(string spaceCraftName, Guid journeyId,
             [FromQuery]string pageState, [FromQuery]int? pageSize)
         {
             var spaceCraft = new Table<spacecraft_temperature_over_time>(Service.Session);
@@ -47,7 +48,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 query.SetPagingState(Convert.FromBase64String(pageState));
             }
-            var temperature = query.ExecutePaged();
+            var temperature = await query.ExecutePagedAsync();
             return new PagedResultWrapper<ICollection<spacecraft_temperature_over_time>>(pageSize.HasValue ? pageSize.Value : 0,
                 temperature.PagingState, temperature.OrderBy(s => s.Reading_Time).ToList()
             );
@@ -63,7 +64,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="pageSize">The page size to return</param>
         /// <returns>A PageResultWrapper containing the results</returns>
         [HttpGet("pressure")]
-        public ActionResult<PagedResultWrapper<ICollection<spacecraft_pressure_over_time>>> GetPressureReading(string spaceCraftName, Guid journeyId,
+        public async Task<ActionResult<PagedResultWrapper<ICollection<spacecraft_pressure_over_time>>>> GetPressureReading(string spaceCraftName, Guid journeyId,
                     [FromQuery]string pageState, [FromQuery]int? pageSize)
         {
 
@@ -78,9 +79,9 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 query.SetPagingState(Convert.FromBase64String(pageState));
             }
-            var pressure = query.ExecutePaged();
-            return new PagedResultWrapper<ICollection<spacecraft_pressure_over_time>>(pageSize.HasValue ? pageSize.Value : 0,
-                pressure.PagingState, pressure.OrderBy(s => s.Reading_Time).ToList()
+            var pressure = await query.ExecutePagedAsync();
+            return Ok(new PagedResultWrapper<ICollection<spacecraft_pressure_over_time>>(pageSize.HasValue ? pageSize.Value : 0,
+                pressure.PagingState, pressure.OrderBy(s => s.Reading_Time).ToList())
             );
         }
 
@@ -94,7 +95,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="pageSize">The page size to return</param>
         /// <returns>A PageResultWrapper containing the results</returns>
         [HttpGet("location")]
-        public ActionResult<PagedResultWrapper<ICollection<spacecraft_location_over_time>>> GetLocationReading(string spaceCraftName, Guid journeyId,
+        public async Task<ActionResult<PagedResultWrapper<ICollection<spacecraft_location_over_time>>>> GetLocationReading(string spaceCraftName, Guid journeyId,
                     [FromQuery]string pageState, [FromQuery]int? pageSize)
         {
             var spaceCraft = new Table<spacecraft_location_over_time>(Service.Session);
@@ -108,7 +109,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 query.SetPagingState(Convert.FromBase64String(pageState));
             }
-            var location = query.ExecutePaged();
+            var location = await query.ExecutePagedAsync();
             return new PagedResultWrapper<ICollection<spacecraft_location_over_time>>(pageSize.HasValue ? pageSize.Value : 0,
                 location.PagingState, location.OrderBy(s => s.Reading_Time).ToList()
             );
@@ -124,7 +125,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="pageSize">The page size to return</param>
         /// <returns>A PageResultWrapper containing the results</returns>
         [HttpGet("speed")]
-        public ActionResult<PagedResultWrapper<ICollection<spacecraft_speed_over_time>>> GetSpeedReading(string spaceCraftName, Guid journeyId,
+        public async Task<ActionResult<PagedResultWrapper<ICollection<spacecraft_speed_over_time>>>> GetSpeedReading(string spaceCraftName, Guid journeyId,
                     [FromQuery]string pageState, [FromQuery]int? pageSize)
         {
             var spaceCraft = new Table<spacecraft_speed_over_time>(Service.Session);
@@ -138,7 +139,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 query.SetPagingState(Convert.FromBase64String(pageState));
             }
-            var speed = query.ExecutePaged();
+            var speed = await query.ExecutePagedAsync();
             return new PagedResultWrapper<ICollection<spacecraft_speed_over_time>>(pageSize.HasValue ? pageSize.Value : 0,
                 speed.PagingState, speed.OrderBy(s => s.Reading_Time).ToList()
             );
@@ -150,7 +151,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="temperatures">The array of spacecraft_temperature_over_time</param>
         /// <returns>A 200 if successful, other wise an error</returns>
         [HttpPost("temperature")]
-        public ActionResult SaveTemperatures([FromBody]spacecraft_temperature_over_time[] temperatures)
+        public async Task<IActionResult> SaveTemperatures([FromBody]spacecraft_temperature_over_time[] temperatures)
         {
             IMapper mapper = new Mapper(Service.Session);
             var batch = mapper.CreateBatch();
@@ -158,7 +159,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 batch.Insert(temperatures[i]);
             }
-            mapper.Execute(batch);
+            await mapper.ExecuteAsync(batch);
             return Ok();
         }
 
@@ -168,7 +169,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="pressures">The array of spacecraft_pressure_over_time</param>
         /// <returns>A 200 if successful, other wise an error</returns>
         [HttpPost("pressure")]
-        public ActionResult SavePressures([FromBody]spacecraft_pressure_over_time[] pressures)
+        public async Task<IActionResult> SavePressures([FromBody]spacecraft_pressure_over_time[] pressures)
         {
             IMapper mapper = new Mapper(Service.Session);
             var batch = mapper.CreateBatch();
@@ -176,7 +177,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 batch.Insert(pressures[i]);
             }
-            mapper.Execute(batch);
+            await mapper.ExecuteAsync(batch);
             return Ok();
         }
 
@@ -186,7 +187,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="speed">The array of spacecraft_speed_over_time</param>
         /// <returns>A 200 if successful, other wise an error</returns>
         [HttpPost("speed")]
-        public ActionResult SaveSpeed([FromBody]spacecraft_speed_over_time[] speed)
+        public async Task<IActionResult> SaveSpeed([FromBody]spacecraft_speed_over_time[] speed)
         {
             IMapper mapper = new Mapper(Service.Session);
             var batch = mapper.CreateBatch();
@@ -194,7 +195,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 batch.Insert(speed[i]);
             }
-            mapper.Execute(batch);
+            await mapper.ExecuteAsync(batch);
             return Ok();
         }
 
@@ -204,7 +205,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         /// <param name="locations">The array of spacecraft_location_over_time</param>
         /// <returns>A 200 if successful, other wise an error</returns>
         [HttpPost("location")]
-        public ActionResult SaveLocations([FromBody]spacecraft_location_over_time[] locations)
+        public async Task<ActionResult> SaveLocations([FromBody]spacecraft_location_over_time[] locations)
         {
             IMapper mapper = new Mapper(Service.Session);
             var batch = mapper.CreateBatch();
@@ -212,9 +213,8 @@ namespace getting_started_with_apollo_csharp.Controllers
             {
                 batch.Insert(locations[i]);
             }
-            mapper.Execute(batch);
+            await mapper.ExecuteAsync(batch);
             return Ok();
         }
-
     }
 }

@@ -1,7 +1,8 @@
 using System;
 using Cassandra;
-using System.IO;
+using System.Threading;
 using getting_started_with_apollo_csharp.Models;
+using System.Threading.Tasks;
 
 namespace getting_started_with_apollo_csharp.Services
 {
@@ -21,10 +22,7 @@ namespace getting_started_with_apollo_csharp.Services
                     _session = ConnectToApollo(Environment.GetEnvironmentVariable("ApolloUsername"),
                     Environment.GetEnvironmentVariable("ApolloPassword"),
                     Environment.GetEnvironmentVariable("ApolloKeyspace"),
-                    Environment.GetEnvironmentVariable("SecureConnectBundlePath"));
-
-                    //Register the UDT map for the location UDT so that we can use it from LINQ
-                    _session.UserDefinedTypes.Define(UdtMap.For<location_udt>());
+                    Environment.GetEnvironmentVariable("SecureConnectBundlePath")).Result;
                 }
                 return _session;
             }
@@ -38,14 +36,14 @@ namespace getting_started_with_apollo_csharp.Services
         /// <param name="keyspace">The keyspace in Apollo</param>
         /// <param name="secureConnectBundlePath">The local file path were the secure connect bundle was saved</param>
         /// <returns>The connected session object</returns>
-        private ISession ConnectToApollo(string username, string password, string keyspace, string secureConnectBundlePath)
+        private async Task<ISession> ConnectToApollo(string username, string password, string keyspace, string secureConnectBundlePath)
         {
-            var session = Cluster.Builder()
+            var session = await Cluster.Builder()
                        .WithCloudSecureConnectionBundle(secureConnectBundlePath)
                        .WithCredentials(username, password)
                        .WithQueryOptions(new QueryOptions().SetConsistencyLevel(ConsistencyLevel.LocalQuorum))
                        .Build()
-                       .Connect(keyspace);
+                       .ConnectAsync(keyspace);
 
             return session;
         }
@@ -58,16 +56,19 @@ namespace getting_started_with_apollo_csharp.Services
         /// <param name="keyspace">The keyspace in Apollo</param>
         /// <param name="secureConnectBundlePath">The local file path were the secure connect bundle was saved</param>
         /// <returns>A tuple containing the success of the operation and if it failed the error message</returns>
-        public Tuple<bool, string> SaveConnection(string username, string password, string keyspace, string secureConnectBundlePath)
+        public async Task<Tuple<bool, string>> SaveConnection(string username, string password, string keyspace, string secureConnectBundlePath)
         {
             try
             {
-                var session = ConnectToApollo(username, password, keyspace, secureConnectBundlePath);
+                var session = await ConnectToApollo(username, password, keyspace, secureConnectBundlePath);
                 Environment.SetEnvironmentVariable("ApolloUsername", username);
                 Environment.SetEnvironmentVariable("ApolloPassword", password);
                 Environment.SetEnvironmentVariable("ApolloKeyspace", keyspace);
                 Environment.SetEnvironmentVariable("SecureConnectBundlePath", secureConnectBundlePath);
-                _session = session;
+                Interlocked.Exchange(ref _session, session);
+
+                //Register the UDT map for the location UDT so that we can use it from LINQ
+                _session.UserDefinedTypes.Define(UdtMap.For<location_udt>());
                 return new Tuple<bool, string>(true, null);
             }
             catch (Exception ex)
@@ -84,11 +85,11 @@ namespace getting_started_with_apollo_csharp.Services
         /// <param name="keyspace">The keyspace in Apollo</param>
         /// <param name="secureConnectBundlePath">The local file path were the secure connect bundle was saved</param>
         /// <returns>A tuple containing the success of the operation and if it failed the error message</returns>
-        public Tuple<bool, string> TestConnection(string username, string password, string keyspace, string secureConnectBundlePath)
+        public async Task<Tuple<bool, string>> TestConnection(string username, string password, string keyspace, string secureConnectBundlePath)
         {
             try
             {
-                var session = ConnectToApollo(username, password, keyspace, secureConnectBundlePath);
+                var session = await ConnectToApollo(username, password, keyspace, secureConnectBundlePath);
                 return new Tuple<bool, string>(true, null);
             }
             catch (Exception ex)

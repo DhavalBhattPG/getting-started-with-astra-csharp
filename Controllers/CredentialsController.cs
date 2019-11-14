@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace getting_started_with_apollo_csharp.Controllers
 {
@@ -27,7 +28,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         [ProducesResponseType(200)]     // OK
         [ProducesResponseType(401)]     // Unauthorized
         [HttpGet]
-        public ActionResult CheckConnection()
+        public IActionResult CheckConnection()
         {
             try
             {
@@ -60,7 +61,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         [ProducesResponseType(200)]     // OK
         [ProducesResponseType(401)]     // Unauthorized
         [HttpPost("test")]
-        public ActionResult TestCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
+        public async Task<IActionResult> TestCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
         {
             //Copy the secure connect bundle to a temporary locationobj
             var filePath = Path.GetTempPath() + "/" + Guid.NewGuid() + ".zip";
@@ -69,7 +70,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             output.Close();
 
             //Now test to see if it works
-            var result = Service.TestConnection(username, password, keyspace, filePath);
+            var result = await Service.TestConnection(username, password, keyspace, filePath);
             if (result.Item1)
             {
                 return Ok();
@@ -94,7 +95,7 @@ namespace getting_started_with_apollo_csharp.Controllers
         [ProducesResponseType(200)]     // OK
         [ProducesResponseType(401)]     // Unauthorized
         [HttpPost]
-        public ActionResult SaveCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
+        public async Task<IActionResult> SaveCredentials([FromQuery]string username, [FromQuery]string password, [FromQuery]string keyspace, IFormFile file)
         {
             //Copy the secure connect bundle to a temporary location
             var filePath = Path.GetTempPath() + "/" + Guid.NewGuid() + ".zip";
@@ -103,7 +104,7 @@ namespace getting_started_with_apollo_csharp.Controllers
             output.Close();
 
             //Now test to see if it works
-            var result = Service.SaveConnection(username, password, keyspace, filePath);
+            var result = await Service.SaveConnection(username, password, keyspace, filePath);
             if (result.Item1)
             {
                 return Ok();
