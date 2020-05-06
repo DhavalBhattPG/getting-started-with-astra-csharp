@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using getting_started_with_apollo_csharp.Interfaces;
+using getting_started_with_astra_csharp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using getting_started_with_apollo_csharp.Models;
+using getting_started_with_astra_csharp.Models;
 using Cassandra.Data.Linq;
 using Cassandra.Mapping;
 using System.Threading.Tasks;
 
-namespace getting_started_with_apollo_csharp.Controllers
+namespace getting_started_with_astra_csharp.Controllers
 {
     /// <summary>
     /// Handles operations around the instrument readings of a spacecraft journey

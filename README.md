@@ -2,7 +2,9 @@
 
 This provides an example REST backend built in C# using .NET Core 2.1 for use with the [Getting Started with Apollo UI](https://github.com/DataStax-Examples/getting-started-with-apollo-ui).
 
-Contributors: [bechbd](https://github.com/bechbd)
+Contributors:
+* [bechbd](https://github.com/bechbd)
+* [msmygit](https://github.com/msmygit)
 
 ## Objectives
 * How to connect to Apollo via the Secure Connect Bundle

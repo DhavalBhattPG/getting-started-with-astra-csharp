@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "getting_started_with_apollo_csharp": {
+    "getting_started_with_astra_csharp": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

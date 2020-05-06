@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace getting_started_with_apollo_csharp.Models
+namespace getting_started_with_astra_csharp.Models
 {
     /// <summary>
     /// Represents a row in the spacecraft_speed_over_time

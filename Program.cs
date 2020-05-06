@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace getting_started_with_apollo_csharp
+namespace getting_started_with_astra_csharp
 {
     public class Program
     {

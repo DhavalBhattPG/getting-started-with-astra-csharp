@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace getting_started_with_apollo_csharp.Models
+namespace getting_started_with_astra_csharp.Models
 {
     /// <summary>
     /// This class provides a wrapper around a result set which contains the data results as well as the returned page size and page state.

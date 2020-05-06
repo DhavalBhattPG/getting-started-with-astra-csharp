@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace getting_started_with_apollo_csharp
+namespace getting_started_with_astra_csharp
 {
     public class Startup
     {
@@ -31,8 +31,8 @@ namespace getting_started_with_apollo_csharp
                 config.PostProcess = document =>
                {
                    document.Info.Version = "v1";
-                   document.Info.Title = "Getting Started with Apollo - C# Backend";
-                   document.Info.Description = "A simple ASP.NET Core web API version of the Getting Started with Apollo backend for use with the Getting Started with Apollo UI";
+                   document.Info.Title = "Getting Started with Astra - C# Backend";
+                   document.Info.Description = "A simple ASP.NET Core web API version of the Getting Started with Astra backend for use with the Getting Started with Astra UI";
                    document.Info.TermsOfService = "None";
                    document.Info.Contact = new NSwag.OpenApiContact
                    {
@@ -56,8 +56,8 @@ namespace getting_started_with_apollo_csharp
                     .AllowAnyHeader();
             }));
 
-            //This adds a singleton of the Apollo Session connection to dependency injection
-            services.AddSingleton(typeof(Interfaces.IDataStaxService), typeof(Services.ApolloService));
+            //This adds a singleton of the Astra Session connection to dependency injection
+            services.AddSingleton(typeof(Interfaces.IDataStaxService), typeof(Services.AstraService));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

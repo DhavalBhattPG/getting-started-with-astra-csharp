@@ -1,11 +1,11 @@
-using getting_started_with_apollo_csharp.Interfaces;
+using getting_started_with_astra_csharp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace getting_started_with_apollo_csharp.Controllers
+namespace getting_started_with_astra_csharp.Controllers
 {
     /// <summary>
     /// Works with the managing the credentials for the Apollo database

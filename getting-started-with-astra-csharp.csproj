@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>getting_started_with_apollo_csharp</RootNamespace>
+    <RootNamespace>getting_started_with_astra_csharp</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
