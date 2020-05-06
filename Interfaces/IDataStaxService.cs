@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Cassandra;
 
-namespace getting_started_with_apollo_csharp.Interfaces
+namespace getting_started_with_astra_csharp.Interfaces
 {
     public interface IDataStaxService
     {

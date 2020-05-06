@@ -1,14 +1,14 @@
 using System;
 using Cassandra;
 using System.Threading;
-using getting_started_with_apollo_csharp.Models;
+using getting_started_with_astra_csharp.Models;
 using System.Threading.Tasks;
 
-namespace getting_started_with_apollo_csharp.Services
+namespace getting_started_with_astra_csharp.Services
 {
-    public class ApolloService : Interfaces.IDataStaxService
+    public class AstraService : Interfaces.IDataStaxService
     {
-        private static readonly ApolloService _ApolloServiceInstance = new ApolloService();
+        private static readonly AstraService _AstraServiceInstance = new AstraService();
         private ISession _session;
 
         public ISession Session
@@ -18,10 +18,10 @@ namespace getting_started_with_apollo_csharp.Services
                 //If the session is null then create a new one
                 if (_session == null)
                 {
-                    //Create the new Apollo session then save the parameters to Environment Variables for later use in the same session
-                    _session = ConnectToApollo(Environment.GetEnvironmentVariable("ApolloUsername"),
-                    Environment.GetEnvironmentVariable("ApolloPassword"),
-                    Environment.GetEnvironmentVariable("ApolloKeyspace"),
+                    //Create the new Astra session then save the parameters to Environment Variables for later use in the same session
+                    _session = ConnectToAstra(Environment.GetEnvironmentVariable("AstraUsername"),
+                    Environment.GetEnvironmentVariable("AstraPassword"),
+                    Environment.GetEnvironmentVariable("AstraKeyspace"),
                     Environment.GetEnvironmentVariable("SecureConnectBundlePath")).Result;
                 }
                 return _session;
@@ -29,14 +29,14 @@ namespace getting_started_with_apollo_csharp.Services
         }
 
         /// <summary>
-        /// Creates a connection to Apollo with the specified parameters
+        /// Creates a connection to Astra with the specified parameters
         /// </summary>
-        /// <param name="username">The Apollo user name</param>
-        /// <param name="password">The Apollo password</param>
-        /// <param name="keyspace">The keyspace in Apollo</param>
+        /// <param name="username">The Astra user name</param>
+        /// <param name="password">The Astra password</param>
+        /// <param name="keyspace">The keyspace in Astra</param>
         /// <param name="secureConnectBundlePath">The local file path were the secure connect bundle was saved</param>
         /// <returns>The connected session object</returns>
-        private async Task<ISession> ConnectToApollo(string username, string password, string keyspace, string secureConnectBundlePath)
+        private async Task<ISession> ConnectToAstra(string username, string password, string keyspace, string secureConnectBundlePath)
         {
             var session = await Cluster.Builder()
                        .WithCloudSecureConnectionBundle(secureConnectBundlePath)
@@ -51,19 +51,19 @@ namespace getting_started_with_apollo_csharp.Services
         /// <summary>
         /// Saves the new Session object from the parameters provided
         /// </summary>
-        /// <param name="username">The Apollo user name</param>
-        /// <param name="password">The Apollo password</param>
-        /// <param name="keyspace">The keyspace in Apollo</param>
+        /// <param name="username">The Astra user name</param>
+        /// <param name="password">The Astra password</param>
+        /// <param name="keyspace">The keyspace in Astra</param>
         /// <param name="secureConnectBundlePath">The local file path were the secure connect bundle was saved</param>
         /// <returns>A tuple containing the success of the operation and if it failed the error message</returns>
         public async Task<Tuple<bool, string>> SaveConnection(string username, string password, string keyspace, string secureConnectBundlePath)
         {
             try
             {
-                var session = await ConnectToApollo(username, password, keyspace, secureConnectBundlePath);
-                Environment.SetEnvironmentVariable("ApolloUsername", username);
-                Environment.SetEnvironmentVariable("ApolloPassword", password);
-                Environment.SetEnvironmentVariable("ApolloKeyspace", keyspace);
+                var session = await ConnectToAstra(username, password, keyspace, secureConnectBundlePath);
+                Environment.SetEnvironmentVariable("AstraUsername", username);
+                Environment.SetEnvironmentVariable("AstraPassword", password);
+                Environment.SetEnvironmentVariable("AstraKeyspace", keyspace);
                 Environment.SetEnvironmentVariable("SecureConnectBundlePath", secureConnectBundlePath);
                 Interlocked.Exchange(ref _session, session);
 
@@ -80,16 +80,16 @@ namespace getting_started_with_apollo_csharp.Services
         /// <summary>
         /// Tests the new Session object from the parameters provided
         /// </summary>
-        /// <param name="username">The Apollo user name</param>
-        /// <param name="password">The Apollo password</param>
-        /// <param name="keyspace">The keyspace in Apollo</param>
+        /// <param name="username">The Astra user name</param>
+        /// <param name="password">The Astra password</param>
+        /// <param name="keyspace">The keyspace in Astra</param>
         /// <param name="secureConnectBundlePath">The local file path were the secure connect bundle was saved</param>
         /// <returns>A tuple containing the success of the operation and if it failed the error message</returns>
         public async Task<Tuple<bool, string>> TestConnection(string username, string password, string keyspace, string secureConnectBundlePath)
         {
             try
             {
-                var session = await ConnectToApollo(username, password, keyspace, secureConnectBundlePath);
+                var session = await ConnectToAstra(username, password, keyspace, secureConnectBundlePath);
                 return new Tuple<bool, string>(true, null);
             }
             catch (Exception ex)
