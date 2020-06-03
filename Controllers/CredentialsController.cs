@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace getting_started_with_astra_csharp.Controllers
 {
     /// <summary>
-    /// Works with the managing the credentials for the Apollo database
+    /// Works with the managing the credentials for the Astra database
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -22,7 +22,7 @@ namespace getting_started_with_astra_csharp.Controllers
         }
 
         /// <summary>
-        /// This checks to see if there is an existing connection to the Apollo database
+        /// This checks to see if there is an existing connection to the Astra database
         /// </summary>
         /// <returns>A 200 if a valid connection exists, a 401 if one does not</returns>
         [ProducesResponseType(200)]     // OK
@@ -51,11 +51,11 @@ namespace getting_started_with_astra_csharp.Controllers
 
         // GET api/credentials/test
         /// <summary>
-        /// This tests the provided parameters and checks to see if they establish a valid connection to the Apollo database
+        /// This tests the provided parameters and checks to see if they establish a valid connection to the Astra database
         /// </summary>
-        /// <param name="username">The Apollo database user name</param>
-        /// <param name="password">The Apollo database password for the user name</param>
-        /// <param name="keyspace">The keyspace in the Apollo database</param>
+        /// <param name="username">The Astra database user name</param>
+        /// <param name="password">The Astra database password for the user name</param>
+        /// <param name="keyspace">The keyspace in the Astra database</param>
         /// <param name="file">A body element containing the secure connect bundle file</param>
         /// <returns>A 200 if the test was successful, a 401 if it was not</returns>
         [ProducesResponseType(200)]     // OK
@@ -85,11 +85,11 @@ namespace getting_started_with_astra_csharp.Controllers
 
         // GET api/credentials
         /// <summary>
-        /// This tests and then saves the provided parameters and checks to see if they establish a valid connection to the Apollo database
+        /// This tests and then saves the provided parameters and checks to see if they establish a valid connection to the Astra database
         /// </summary>
-        /// <param name="username">The Apollo database user name</param>
-        /// <param name="password">The Apollo database password for the user name</param>
-        /// <param name="keyspace">The keyspace in the Apollo database</param>
+        /// <param name="username">The Astra database user name</param>
+        /// <param name="password">The Astra database password for the user name</param>
+        /// <param name="keyspace">The keyspace in the Astra database</param>
         /// <param name="file">A body element containing the secure connect bundle file</param>
         /// <returns>A 200 if a valid connection exists, a 401 if one does not</returns>
         [ProducesResponseType(200)]     // OK
