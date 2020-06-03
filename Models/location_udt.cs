@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace getting_started_with_astra_csharp.Models
 {
     /// <summary>
-    /// A C# representation of the location udt in the Apollo database
+    /// A C# representation of the location udt in the Astra database
     /// </summary>
     public class location_udt
     {
