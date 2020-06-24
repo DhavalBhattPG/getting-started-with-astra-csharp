@@ -1,4 +1,4 @@
-# Getting Started with Astra - C#
+# Getting Started with Apache Cassandra™ and C# using DataStax Astra 
 
 This provides an example REST backend built in C# using .NET Core 2.1 for use with the [Getting Started with Astra UI](https://github.com/DataStax-Examples/getting-started-with-astra-ui).
 
