@@ -2,6 +2,8 @@
 
 This provides an example REST backend built in C# using .NET Core 2.1 for use with the [Getting Started with Astra UI](https://github.com/DataStax-Examples/getting-started-with-astra-ui).
 
+Create a free-forever Cassandra Database with DataStax Astra: [click here to get started](https://astra.datastax.com/register?utm_source=devplay&utm_medium=github&utm_campaign=getting-started-with-astra-csharp) 🚀
+
 Contributors:
 * [bechbd](https://github.com/bechbd)
 * [msmygit](https://github.com/msmygit)
