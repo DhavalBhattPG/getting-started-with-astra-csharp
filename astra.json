@@ -1,0 +1,10 @@
+{
+  "name": "Getting Started with Cassandra + C# + Astra",
+  "description": "This provides an example REST backend built in C# using .NET Core 2.1 for use with the Getting Started with Astra UI.",
+  "duration": "50 minutes",
+  "skillLevel": "Intermediate",
+  "githubUrl": "https://github.com/DataStax-Examples/getting-started-with-astra-csharp",
+  "tags": [{ "name": "labs", "color": "warning" }, { "name": "c#" }],
+  "category": "apps",
+  "priority": 3
+}
